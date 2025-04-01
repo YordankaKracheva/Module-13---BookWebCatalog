@@ -1,0 +1,86 @@
+﻿@using BookWebCatalog.Models;
+@model BookViewModel;
+
+<div class="row">
+	<div class="col-md-8 mx-auto rounded border p-3">
+		<h2 class="text-center mb-5">New Book</h2>
+		<form method="post" enctype="multipart/form-data">
+			<div class="row mb-3>">
+				<label class="col-sm-4 col-form-label">Id</label>
+				<div class="col-sm-8">
+					<input class="form-control-plaintext" readonly value="@ViewData["BookId"]" />
+				</div>
+			</div>
+			<div class="row mb-3>">
+				<label class="col-sm-4 col-form-label">Title</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="Title" />
+					<span asp-validation-for="Title" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row mb-3>">
+				<label class="col-sm-4 col-form-label">Author</label>
+				<div class="col-sm-8">
+					<select class="form-control" asp-for="@Model.AuthorID">
+						<option value="">Select Author</option>
+						@foreach (var author in Model.Authors)
+						{
+							<option value="@author.Id">@author.FirstName @author.LastName</option>
+						}
+					</select>
+					<span asp-validation-for="@Model.AuthorID" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row mb-3>">
+				<label class="col-sm-4 col-form-label">Date of Releasing</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="DateOfReleasing" />
+					<span asp-validation-for="DateOfReleasing" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row mb-3>">
+				<label class="col-sm-4 col-form-label">Rating</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="Rating" />
+					<span asp-validation-for="Rating" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Genre</label>
+				<div class="col-sm-8">
+					<select class="form-control" asp-for="@Model.GenreID">
+						<option value="">Select Genre</option>
+						@foreach (var genre in Model.Genres)
+						{
+							<option value="@genre.Id">@genre.Name</option>
+						}
+					</select>
+				</div>
+			</div>
+			<div class="row mb-3>">
+				<label class="col-sm-4 col-form-label">Publisher</label>
+				<div class="col-sm-8">
+					<select class="form-control" asp-for="@Model.PublisherID">
+						<option value="">Select Publisher</option>
+						@foreach (var publisher in Model.Publishers)
+						{
+							<option value="@publisher.Id">@publisher.Name</option>
+						}
+					</select>
+					<span asp-validation-for="@Model.PublisherID" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row>">
+				<div class="offset-sm-4 col-sm-4 d-grid">
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+				<div class="col-sm-4 d-grid">
+					<a class="btn btn-outline-primary" asp-controller="Book" asp-action="Index" role="button">
+						Cancel
+					</a>
+				</div>
+			</div>
+
+		</form>
+	</div>
+</div>

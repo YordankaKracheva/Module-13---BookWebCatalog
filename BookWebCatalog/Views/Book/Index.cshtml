@@ -1,0 +1,56 @@
+﻿@using BookWebCatalog.Data.Models;
+@using static BookWebCatalog.Common.AdminUser;
+@model List<Book>
+@{
+
+}
+<h2 class=" text-center mb-5">List of @Model.Count Books</h2>
+<div class="row mb-5">
+    <div class="col">
+        @if (User.IsInRole(AdminRoleName))
+        {
+        <a class="btn btn-primary" asp-area="" asp-controller="Book" asp-action="Create">New Book</a>
+        }
+    </div>
+    <div class="col">
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Date of Releasing</th>
+            <th>Rating</th>
+            <th>Genre</th>
+            <th>Author</th>
+            @if (User.IsInRole(AdminRoleName))
+            {
+                <th>Actions</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model)
+        {
+            <tr>
+                <td>@book.Id</td>
+                <td>@book.Title</td>
+                <td>@book.DateOfReleasing</td>
+                <td>@book.Rating</td>
+                <td>@book.Genre.Name</td>
+                <td>@book.Author.FirstName @book.Author.LastName</td>
+                <td style=" white-space:nowrap">
+                    @if (User.IsInRole(AdminRoleName))
+                    {
+                        <a class="btn btn-primary btn-sm" asp-controller="Book" asp-action="Edit"
+                           asp-route-id="@book.Id">Edit</a>
+                        <a class="btn btn-danger btn-sm" asp-controller="Book" asp-action="Delete"
+                           asp-route-id="@book.Id" onclick="return confirm('Are you sure?')">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
