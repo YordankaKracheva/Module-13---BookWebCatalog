@@ -1,81 +1,173 @@
 ﻿@using BookWebCatalog.Models;
 @model BookCreateViewModel;
 
-<div class="row">
-	<div class="col-md-8 mx-auto rounded border p-3">
-		<h2 class="text-center mb-5">New Book</h2>
-		<form method="post" enctype="multipart/form-data">
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">Title</label>
-				<div class="col-sm-8">
-					<input class="form-control" asp-for="Title" />
-					<span asp-validation-for="Title" class="text-danger"></span>
-				</div>
-			</div>
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">Author</label>
-				<div class="col-sm-8">
-					<select class="form-control" asp-for="@Model.AuthorID">
-						<option value="">Select Author</option>
-						@foreach (var author in Model.Authors)
-						{
-							<option value="@author.Id">@author.FirstName @author.LastName</option>
-						}
-					</select>
-					<span asp-validation-for="@Model.AuthorID" class="text-danger"></span>
-				</div>
-			</div>
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">Date of Releasing</label>
-				<div class="col-sm-8">
-					<input class="form-control" asp-for="DateOfReleasing" />
-					<span asp-validation-for="DateOfReleasing" class="text-danger"></span>
-				</div>
-			</div>
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">Rating</label>
-				<div class="col-sm-8">
-					<input class="form-control" asp-for="Rating" />
-					<span asp-validation-for="Rating" class="text-danger"></span>
-				</div>
-			</div>
-			<div class="row mb-3">
-				<label class="col-sm-4 col-form-label">Genre</label>
-				<div class="col-sm-8">
-					<select class="form-control" asp-for="@Model.GenreID">
-						<option value="">Select Genre</option>
-						@foreach (var genre in Model.Genres)
-						{
-							<option value="@genre.Id">@genre.Name</option>
-						}
-					</select>
-				</div>
-			</div>
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">Publisher</label>
-				<div class="col-sm-8">
-					<select class="form-control" asp-for="@Model.PublisherID">
-						<option value="">Select Publisher</option>
-						@foreach (var publisher in Model.Publishers)
-						{
-							<option value="@publisher.Id">@publisher.Name</option>
-						}
-					</select>
-					<span asp-validation-for="@Model.PublisherID" class="text-danger"></span>
-				</div>
-			</div>
-			<div class="row>">
-				<div class="offset-sm-4 col-sm-4 d-grid">
-					<button type="submit" class="btn btn-primary">Submit</button>
-				</div>
-				<div class="col-sm-4 d-grid">
-					<a class="btn btn-outline-primary" asp-controller="Book" asp-action="Index" role="button">
-						Cancel
-					</a>
-				</div>
-			</div>
-
-		</form>
-	</div>
+<div class="hero">
+    <h1 class="display-4">Create a New Book</h1>
+    <p class="lead">Please fill out the form to add a new book to the catalog.</p>
 </div>
+
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto rounded-lg border p-5 shadow-lg bg-white">
+            <h2 class="text-center mb-5" style="color: #4b2e20;">Create New Book</h2>
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-4">
+                    <label for="Title" class="form-label">Book Title</label>
+                    <input class="form-control" asp-for="Title" id="Title" placeholder="Enter book title" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label for="AuthorID" class="form-label">Author</label>
+                    <select class="form-select" asp-for="AuthorID" id="AuthorID">
+                        <option value="">Select Author</option>
+                        @foreach (var author in Model.Authors)
+                        {
+                            <option value="@author.Id">@author.FirstName @author.LastName</option>
+                        }
+                    </select>
+                    <span asp-validation-for="AuthorID" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label for="DateOfReleasing" class="form-label">Release Date</label>
+                    <input type="date" class="form-control" asp-for="DateOfReleasing" id="DateOfReleasing" />
+                    <span asp-validation-for="DateOfReleasing" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label for="Rating" class="form-label">Rating (0 - 5)</label>
+                    <input type="number" class="form-control" asp-for="Rating" id="Rating" min="0" max="5" step="0.1" />
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label for="GenreID" class="form-label">Genre</label>
+                    <select class="form-select" asp-for="GenreID" id="GenreID">
+                        <option value="">Select Genre</option>
+                        @foreach (var genre in Model.Genres)
+                        {
+                            <option value="@genre.Id">@genre.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="PublisherID" class="form-label">Publisher</label>
+                    <select class="form-select" asp-for="PublisherID" id="PublisherID">
+                        <option value="">Select Publisher</option>
+                        @foreach (var publisher in Model.Publishers)
+                        {
+                            <option value="@publisher.Id">@publisher.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="PublisherID" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <div class="d-grid col-md-5">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                    </div>
+                    <div class="d-grid col-md-5">
+                        <a class="btn btn-outline-primary btn-lg" asp-controller="Book" asp-action="Index" role="button">
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(to right, #6f4f26, #d2b48c);
+        margin: 0;
+        padding: 0;
+    }
+
+    .hero {
+        color: white;
+        padding: 100px 0;
+        text-align: center;
+        background-size: cover;
+        background-color: rgba(0, 0, 0, 0.5); /* Add overlay for readability */
+    }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            margin-top: 10px;
+        }
+    .container {
+        max-width: 80%;
+    }
+
+    .rounded-lg {
+        border-radius: 10px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-select, .form-control {
+        border-radius: 8px;
+        font-size: 1.1rem;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #8b5e3c;
+            box-shadow: 0 0 6px rgba(139, 94, 60, 0.5);
+        }
+
+    .btn-primary {
+        background-color: #8b5e3c;
+        border: none;
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        border-radius: 6px;
+        transition: background-color 0.3s;
+    }
+
+        .btn-primary:hover {
+            background-color: #5a3e2d;
+        }
+
+    .btn-outline-primary {
+        color: #8b5e3c;
+        border-color: #8b5e3c;
+        font-weight: 600;
+        text-transform: uppercase;
+        border-radius: 6px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #8b5e3c;
+            color: white;
+        }
+
+    .shadow-lg {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Padding adjustments */
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+</style>
 

@@ -1,57 +1,187 @@
 ﻿@using BookWebCatalog.Models;
 @model AuthorViewModel;
-@{
 
-}
-<div class="row">
-	<div class="col-md-8 mx-auto rounded border p-3">
-		<h2 class="text-center mb-5">Edit Author</h2>
-		<form method="post" enctype="multipart/form-data">
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">Id</label>
-				<div class="col-sm-8">
-					<input class="form-control-plaintext" readonly value="@ViewData["AuthorId"]" />
-				</div>
-			</div>
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">First Name</label>
-				<div class="col-sm-8">
-					<input class="form-control" asp-for="FirstName" />
-					<span asp-validation-for="FirstName" class="text-danger"></span>
-				</div>
-			</div>
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">Last Name</label>
-				<div class="col-sm-8">
-					<input class="form-control" asp-for="LastName" />
-					<span asp-validation-for="LastName" class="text-danger"></span>
-				</div>
-			</div>
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">Years</label>
-				<div class="col-sm-8">
-					<input class="form-control" asp-for="Years" />
-					<span asp-validation-for="Years" class="text-danger"></span>
-				</div>
-			</div>
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">DateOfBirth</label>
-				<div class="col-sm-8">
-					<input class="form-control" asp-for="DateOfBirth" />
-					<span asp-validation-for="DateOfBirth" class="text-danger"></span>
-				</div>
-			</div>
-			<div class="row>">
-				<div class="offset-sm-4 col-sm-4 d-grid">
-					<button type="submit" class="btn btn-primary">Submit</button>
-				</div>
-				<div class="col-sm-4 d-grid">
-					<a class="btn btn-outline-primary" asp-controller="Author" asp-action="Index" role="button">
-						Cancel
-					</a>
-				</div>
-			</div>
+<div class="container my-5">
+    <div class="card shadow-lg rounded-lg">
+        <div class="card-body">
+            <h2 class="text-center mb-4" style="color: #6f4f26;">Edit Author</h2>
+            <form method="post" enctype="multipart/form-data">
+                <!-- Editable Table Starts -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Field</th>
+                                <th class="text-center">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><label class="form-label">First Name</label></td>
+                                <td>
+                                    <input class="form-control" asp-for="FirstName" placeholder="Enter first name" />
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label class="form-label">Last Name</label></td>
+                                <td>
+                                    <input class="form-control" asp-for="LastName" placeholder="Enter last name" />
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label class="form-label">Years</label></td>
+                                <td>
+                                    <input class="form-control" asp-for="Years" placeholder="Enter years" />
+                                    <span asp-validation-for="Years" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label class="form-label">Date of Birth</label></td>
+                                <td>
+                                    <input class="form-control" asp-for="DateOfBirth" type="date" />
+                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Editable Table Ends -->
 
-		</form>
-	</div>
+                <div class="row mt-4">
+                    <div class="offset-sm-4 col-sm-4 d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <a class="btn btn-outline-secondary btn-lg" asp-controller="Author" asp-action="Index" role="button">
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(to right, #6f4f26, #d2b48c); /* Gradient from brown to tan */
+        margin: 0;
+        padding: 0;
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 12px;
+        padding: 30px;
+    }
+
+    .card h2 {
+        font-size: 2.2rem;
+        color: #6f4f26;
+        margin-bottom: 35px;
+        font-weight: 600;
+    }
+
+    .form-label {
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        font-size: 1rem;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control:focus {
+        border-color: #8b5e3c;
+        box-shadow: 0 0 5px rgba(139, 94, 60, 0.5);
+    }
+
+    .table {
+        margin-top: 20px;
+        border-collapse: collapse;
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    .table th, .table td {
+        padding: 18px;
+        text-align: left;
+    }
+
+    .table th {
+        background-color: #6f4f26;
+        color: white;
+        font-weight: bold;
+    }
+
+    .table td {
+        background-color: #f9f9f9;
+        border-top: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .btn-primary {
+        background-color: #8b5e3c; /* Darker brown button */
+        border: none;
+        color: white;
+        text-transform: uppercase;
+        font-weight: 600;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        padding: 15px 25px;
+    }
+
+    .btn-primary:hover {
+        background-color: #5a3e2d; /* Even darker brown on hover */
+    }
+
+    .btn-outline-secondary {
+        color: #8b5e3c;
+        border-color: #8b5e3c;
+        text-transform: uppercase;
+        font-weight: 600;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+        padding: 15px 25px;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #8b5e3c;
+        color: white;
+    }
+
+    media (max-width: 767px) {
+        .card {
+            padding: 20px;
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            font-size: 0.9rem;
+            padding: 10px 12px;
+        }
+
+        .btn-primary, .btn-outline-secondary {
+            font-size: 1rem;
+        }
+
+        .table th, .table td {
+            padding: 12px;
+        }
+    }
+</style>

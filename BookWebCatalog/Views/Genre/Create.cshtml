@@ -1,31 +1,128 @@
 ﻿@using BookWebCatalog.Models;
 @model GenreViewModel;
-@{
 
-}
-<div class="row">
-	<div class="col-md-8 mx-auto rounded border p-3">
-		<h2 class="text-center mb-5">New Genre</h2>
-		<form method="post" enctype="multipart/form-data">
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">Name</label>
-				<div class="col-sm-8">
-					<input class="form-control" asp-for="Name" />
-					<span asp-validation-for="Name" class="text-danger"></span>
-				</div>
-			</div>
-			
-			<div class="row>">
-				<div class="offset-sm-4 col-sm-4 d-grid">
-					<button type="submit" class="btn btn-primary">Submit</button>
-				</div>
-				<div class="col-sm-4 d-grid">
-					<a class="btn btn-outline-primary" asp-controller="Genre" asp-action="Index" role="button">
-						Cancel
-					</a>
-				</div>
-			</div>
-
-		</form>
-	</div>
+<div class="hero">
+    <h1 class="display-4">Create a New Genre</h1>
+    <p class="lead">Please fill out the form to add a new genre to the catalog.</p>
 </div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg rounded border p-4">
+                <h2 class="text-center text-primary mb-4">New Genre</h2>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="mb-4 row">
+                        <label for="Name" class="col-sm-4 col-form-label">Name</label>
+                        <div class="col-sm-8">
+                            <input id="Name" class="form-control" asp-for="Name" placeholder="Enter genre name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="offset-sm-4 col-sm-4">
+                            <button type="submit" class="btn btn-primary w-100">Submit</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <a href="@Url.Action("Index", "Genre")" class="btn btn-outline-secondary w-100">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(to right, #6f4f26, #d2b48c); /* Gradient from brown to tan */
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+    }
+
+    .hero {
+        color: white;
+        padding: 100px 0;
+        text-align: center;
+        background-size: cover;
+        background-color: rgba(0, 0, 0, 0.5); /* Add overlay for readability */
+    }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            margin-top: 10px;
+        }
+
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 30px;
+    }
+
+    .text-primary {
+        color: #6f4f26 !important;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        font-size: 1rem;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .form-control:focus {
+            border-color: #8b5e3c;
+            box-shadow: 0 0 5px rgba(139, 94, 60, 0.5);
+        }
+
+    .btn-primary {
+        background-color: #8b5e3c; /* Darker brown button */
+        border: none;
+        color: white;
+        text-transform: uppercase;
+        font-weight: 600;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+        .btn-primary:hover {
+            background-color: #5a3e2d; /* Even darker brown on hover */
+        }
+
+    .btn-outline-secondary {
+        color: #8b5e3c;
+        border-color: #8b5e3c;
+        text-transform: uppercase;
+        font-weight: 600;
+        border-radius: 4px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #8b5e3c;
+            color: white;
+        }
+
+    .shadow-lg {
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+</style>
