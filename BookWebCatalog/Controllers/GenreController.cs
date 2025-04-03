@@ -3,6 +3,7 @@ using BookWebCatalog.Data.Models;
 using BookWebCatalog.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using static BookWebCatalog.Common.AdminUser;
 
 namespace BookWebCatalog.Controllers
@@ -14,11 +15,12 @@ namespace BookWebCatalog.Controllers
         {
             this.context = _context;
         }
-        public IActionResult Index()
-        {
-            var genres = context.Genres.OrderBy(x=>x.Id).ToList();
-            return View(genres);
-        }
+		public IActionResult Index()
+		{
+			var genres = context.Genres.OrderBy(x => x.Id).ToList();
+			return View(genres);
+		}
+
 		[HttpGet]
         [Authorize(Roles = AdminRoleName)]
         public IActionResult Create()

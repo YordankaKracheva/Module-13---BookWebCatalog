@@ -14,6 +14,8 @@ using static BookWebCatalog.Common.AdminUser;
 using Microsoft.AspNetCore.Authorization;
 using BookWebCatalog.Data.Models;
 using BookWebCatalog.Models;
+using static System.Reflection.Metadata.BlobBuilder;
+using System.Threading.Tasks;
 
 namespace BookWebCatalog.Controllers
 {
@@ -34,10 +36,78 @@ namespace BookWebCatalog.Controllers
 				.Include(b => b.Genre)
 				.OrderBy(x => x.Id)
 				.ToList();
-			return View(books);
+            return View(books);
 		}
 
-		[HttpGet]
+		public IActionResult Search(string searchTerm)
+		{
+			if (string.IsNullOrEmpty(searchTerm))
+			{
+				ViewData["SearchTerm"] = "All Genres"; // You can customize this as needed.
+				var allBooks = context.Books
+				.Include(b => b.BookPublishers)
+				.ThenInclude(bp => bp.Publisher)
+				.Include(b => b.Author)
+				.Include(b => b.Genre)
+				.OrderBy(x => x.Id)
+				.ToList();
+				return View(allBooks); // Show all books if no genre is provided.
+			}
+
+			// Otherwise, filter by genre.
+			var booksByGenre = context.Books
+				.Include(b => b.BookPublishers)
+				.ThenInclude(bp => bp.Publisher)
+				.Include(b => b.Author)
+				.Include(b => b.Genre)
+				.Where(b => b.Genre.Name == searchTerm)
+				.OrderBy(b => b.Title)
+				.ToList();
+
+			// Pass the search term to the view for display purposes (e.g., to show the current search term).
+			ViewData["SearchTerm"] = searchTerm;
+
+			// Return the filtered list to the view.
+			return View(booksByGenre);
+		}
+        //public List<BookPublisher> FillBookPublisher()
+        //{
+        //    List<BookPublisher> list = context.BookPublishers.ToList();
+        //    foreach (var item in list)
+        //    {
+        //        Book book = OneBook(item.BookId);
+        //        item.Book = book;
+        //        Publisher publisher = OnePublisher(item.PublisherId);
+        //        item.Publisher = publisher;
+        //    }
+        //    return list;
+        //}
+        //public Book OneBook(int id)
+        //{
+        //    List<Book> books = context.Books.ToList();
+        //    foreach (var item in books)
+        //    {
+        //        if (item.Id == id)
+        //        {
+        //            return item;
+        //        }
+        //    }
+        //    return null!;
+        //}
+        //public Publisher OnePublisher(int id)
+        //{
+        //    List<Publisher> publishers = context.Publishers.ToList();
+        //    foreach (var item in publishers)
+        //    {
+        //        if (item.Id == id)
+        //        {
+        //            return item;
+        //        }
+        //    }
+        //    return null!;
+        //}
+
+        [HttpGet]
 		[Authorize(Roles = AdminRoleName)]
 		public async Task<IActionResult> Create()
 		{
@@ -52,6 +122,8 @@ namespace BookWebCatalog.Controllers
 				Authors = authors
 			};
 
+
+			
 			return View(viewModel);
 		}
 
@@ -62,13 +134,20 @@ namespace BookWebCatalog.Controllers
 			{
 				return View(book);
 			}
-
+			
 			var bookNew = new Book(book.Title, book.DateOfReleasing, book.Rating, book.AuthorID, book.GenreID)
 			{
 				UserID = User.FindFirstValue(ClaimTypes.NameIdentifier)
 			};
 
-			await context.Books.AddAsync(bookNew);
+            var bookPublisher = new BookPublisher
+            {
+                BookId = bookNew.Id,
+                PublisherId = book.PublisherID
+            };
+            
+            context.BookPublishers.Add(bookPublisher);
+            await context.Books.AddAsync(bookNew);
 			await context.SaveChangesAsync();
 			return RedirectToAction("Index");
 		}
@@ -143,152 +222,4 @@ namespace BookWebCatalog.Controllers
 			return RedirectToAction("Index");
 		}
 	}
-
-	//public class BookController : Controller
-	//{
-	//    private readonly BooksWebCatalogAppDbContext context;
-	//    public BookController(BooksWebCatalogAppDbContext _context)
-	//    {
-	//        this.context = _context;
-	//    }
-	//    public IActionResult Index()
-	//    {
-	//       List<Book> books = FillBooks().OrderBy(x => x.Id).ToList();
-	//        return View(books);
-	//    }
-	//public List<Book> FillBooks()
-	//{
-	//    List<Book> books = context.Books.Include(b => b.BookPublishers).ThenInclude(bp => bp.Publisher).ToList();
-	//    foreach (var item in books)
-	//    {
-	//        item.Author = context.Authors.Find(item.AuthorID);
-	//        item.Genre = context.Genres.Find(item.GenreID);
-	//    }
-	//    return books;
-	//}
-	//    public List<BookPublisher> FillBookPublisher()
-	//    {
-	//        List<BookPublisher> bp = context.BookPublishers.ToList();
-	//        foreach (var item in bp)
-	//        {
-	//            Book book = OneBook(item.BookId);
-	//            item.Book = book;
-	//            Publisher publisher = OnePublisher(item.PublisherId);
-	//            item.Publisher = publisher;
-	//        }
-	//        return bp;
-	//    }
-	//    public Book OneBook(int id)
-	//    {
-	//        List<Book> books = context.Books.ToList();
-	//        foreach (var item in books)
-	//        {
-	//            if (item.Id == id)
-	//            {
-	//                return item;
-	//            }
-	//        }
-	//        return null!;
-	//    }
-	//    public Publisher OnePublisher(int id)
-	//    {
-	//        List<Publisher> publishers = context.Publishers.ToList();
-	//        foreach (var item in publishers)
-	//        {
-	//            if (item.Id == id)
-	//            {
-	//                return item;
-	//            }
-	//        }
-	//        return null!;
-	//    }
-	//    [HttpGet]
-	//    [Authorize(Roles = AdminRoleName)]
-	//    public async Task<IActionResult> Create()
-	//    {
-	//        List<Publisher> publishers = await context.Publishers.ToListAsync();
-	//        List<Genre> genres = await context.Genres.ToListAsync();
-	//        List<Author> authors = await context.Authors.ToListAsync();
-	//        BookCreateViewModel viewModel = new BookCreateViewModel();
-	//        viewModel.Publishers = publishers;
-	//        viewModel.Genres = genres;
-	//        viewModel.Authors = authors;
-	//        return View(viewModel);
-	//    }
-	//    [HttpPost]
-	//    public async Task<IActionResult> Create(BookCreateViewModel book)
-	//    {
-	//        if (!ModelState.IsValid)
-	//        {
-	//            return View(book);
-	//        }
-	//        Book bookNew = new Book(book.Title, book.DateOfReleasing, book.Rating, book.AuthorID, book.GenreID);
-
-	//        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-	//        bookNew.UserID = userId;
-	//        await context.Books.AddAsync(bookNew);
-	//        await context.SaveChangesAsync();
-	//        return RedirectToAction("Index", "Book");
-	//    }
-	//    [HttpGet]
-	//    [Authorize(Roles = AdminRoleName)]
-	//    public IActionResult Delete(int id)
-	//    {
-	//        var book = context.Books.Find(id);
-	//        if (book == null)
-	//        {
-	//            return RedirectToAction("Index", "Book");
-	//        }
-	//        context.Books.Remove(book);
-	//        context.SaveChanges(true);
-	//        return RedirectToAction("Index", "Book");
-	//    }
-	//    [HttpGet]
-	//    [Authorize(Roles = AdminRoleName)]
-	//    public async Task<IActionResult> Edit(int id)
-	//    {
-	//        var book = context.Books.Find(id);
-	//        if (book == null)
-	//        {
-	//            return RedirectToAction("Index", "Book");
-	//        }
-	//        var bookCreateViewModel = new BookCreateViewModel()
-	//        {
-	//            Title = book.Title,
-	//            DateOfReleasing = book.DateOfReleasing,
-	//            Rating = book.Rating,
-	//            GenreID = book.GenreID,
-	//            AuthorID = book.AuthorID
-	//        };
-	//        ViewData["BookId"] = book.Id;
-	//        List<Publisher> publishers = await context.Publishers.ToListAsync();
-	//        List<Genre> genres = await context.Genres.ToListAsync();
-	//        List<Author> authors = await context.Authors.ToListAsync();
-	//        bookCreateViewModel.Publishers = publishers;
-	//        bookCreateViewModel.Genres = genres;
-	//        bookCreateViewModel.Authors = authors;
-	//        return View(bookCreateViewModel);
-	//    }
-	//    [HttpPost]
-	//    public async Task<IActionResult> Edit(int id, BookCreateViewModel book)
-	//    {
-	//        var books = context.Books.Find(id);
-	//        if (books == null)
-	//        {
-	//            return RedirectToAction("Index", "Book");
-	//        }
-	//        if (!ModelState.IsValid)
-	//        {
-	//            ViewData["BookId"] = books.Id;
-	//            return View(books);
-	//        }
-	//        books.Title = book.Title;
-	//        books.DateOfReleasing = book.DateOfReleasing;
-	//        books.Rating = book.Rating;
-	//        books.GenreID = book.GenreID;
-	//        books.AuthorID = book.AuthorID;
-	//        await context.SaveChangesAsync();
-	//        return RedirectToAction("Index", "Book");
-	//    }
-	//}
 }

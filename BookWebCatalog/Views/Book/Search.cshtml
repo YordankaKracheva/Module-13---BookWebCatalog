@@ -1,0 +1,190 @@
+﻿@using BookWebCatalog.Data.Models;
+@model IEnumerable<BookWebCatalog.Data.Models.Book>
+@{
+    ViewData["Title"] = "Search Books";
+    var searchTerm = ViewData["SearchTerm"] as string;
+}
+
+<div class="container py-5">
+    <h2 class="text-center mb-4 text-uppercase font-weight-bold">Search Results</h2>
+
+    <!-- Search Form -->
+    <form method="get" action="@Url.Action("Search", "Book")" class="mb-5">
+        <div class="form-row justify-content-center">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label style="color:#333" for="searchTerm" class="form-label font-weight-bold">Search by Genre</label>
+                    <input type="text" name="searchTerm" id="searchTerm" class="form-control form-control-lg" placeholder="Enter genre name"
+                           value="@searchTerm" aria-describedby="searchHelp" />
+                </div>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Search</button>
+            </div>
+        </div>
+    </form>
+
+    @if (Model.Any())
+    {
+        <h3 class="text-center mb-4">Showing results for: <strong>@searchTerm</strong></h3>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover shadow-lg rounded-lg">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Genre</th>
+                        <th>Rating</th>
+                        <th>Release Date</th>
+                        <th>Publisher(s)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var book in Model)
+                    {
+                        <tr>
+                            <td>@book.Title</td>
+                            <td>@book.Author.FirstName @book.Author.LastName</td>
+                            <td>@book.Genre.Name</td>
+                            <td>@book.Rating</td>
+                            <td>@book.DateOfReleasing</td>
+                            <td>
+                                @foreach (var bookPublisher in book.BookPublishers)
+                                {
+                                    <span>@bookPublisher.Publisher.Name</span>
+                                    @if (bookPublisher != book.BookPublishers.Last())
+                                    {
+                                        <span>, </span>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-center text-muted">No books found for the search term <strong>@searchTerm</strong>.</p>
+    }
+</div>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(to right, #6f4f26, #d2b48c);
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    .container {
+        max-width: 90%;
+    }
+
+    h2, h3 {
+        color: #333;
+    }
+
+    .form-label {
+        font-size: 1.1rem;
+        color: #6f4f26; /* Updated text color */
+    }
+
+    .form-control {
+        border-radius: 8px;
+        font-size: 1.1rem;
+        padding: 14px 18px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+        .form-control:focus {
+            border-color: #8b5e3c;
+            box-shadow: 0 0 8px rgba(139, 94, 60, 0.4);
+        }
+
+    .btn-primary {
+        background-color: #8b5e3c;
+        border: none;
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        border-radius: 6px;
+        transition: background-color 0.3s, transform 0.2s ease-in-out;
+    }
+
+        .btn-primary:hover {
+            background-color: #5a3e2d;
+            transform: scale(1.05);
+        }
+
+    .table-bordered {
+        border: 1px solid #ddd;
+    }
+
+    .table th {
+        vertical-align: middle;
+        padding: 12px 15px;
+    }
+
+    .table td {
+        background-color: white;
+        vertical-align: middle;
+        padding: 12px 15px;
+    }
+
+    .thead-dark {
+        background-color: #6f4f26;
+        color: white;
+    }
+
+    .table-responsive {
+        margin-top: 2rem;
+    }
+
+    .shadow-lg {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Global text styles */
+    .font-weight-bold {
+        font-weight: 700;
+    }
+
+    .text-uppercase {
+        text-transform: uppercase;
+    }
+
+    /* Adjusting small text in form */
+    .form-text {
+        font-size: 0.9rem;
+        color:black /* Updated text color */
+    }
+
+
+    .btn-lg {
+        font-size: 1.2rem;
+        padding: 12px;
+    }
+
+    /* Responsive adjustments */
+    media (max-width: 767px) {
+        .form-row
+
+    {
+        flex-direction: column;
+    }
+
+    .btn-block {
+        width: 100%;
+    }
+
+    .container {
+        max-width: 95%;
+    }
+
+    }
+</style>

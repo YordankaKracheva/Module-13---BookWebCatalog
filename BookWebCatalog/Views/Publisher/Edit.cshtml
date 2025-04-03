@@ -3,35 +3,160 @@
 @{
 
 }
-<div class="row">
-	<div class="col-md-8 mx-auto rounded border p-3">
-		<h2 class="text-center mb-5">Edit Publisher</h2>
-		<form method="post" enctype="multipart/form-data">
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">Id</label>
-				<div class="col-sm-8">
-					<input class="form-control-plaintext" readonly value="@ViewData["PublisherId"]" />
-				</div>
-			</div>
-			<div class="row mb-3>">
-				<label class="col-sm-4 col-form-label">Name</label>
-				<div class="col-sm-8">
-					<input class="form-control" asp-for="Name" />
-					<span asp-validation-for="Name" class="text-danger"></span>
-				</div>
-			</div>
-			
-			<div class="row>">
-				<div class="offset-sm-4 col-sm-4 d-grid">
-					<button type="submit" class="btn btn-primary">Submit</button>
-				</div>
-				<div class="col-sm-4 d-grid">
-					<a class="btn btn-outline-primary" asp-controller="Publisher" asp-action="Index" role="button">
-						Cancel
-					</a>
-				</div>
-			</div>
+<div class="container my-5">
+    <div class="card shadow-lg rounded-lg">
+        <div class="card-body">
+            <h2 class="text-center mb-4" style="color: #6f4f26;">Edit Publisher</h2>
+            <form method="post" enctype="multipart/form-data">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Field</th>
+                                <th class="text-center">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><label class="form-label">Name</label></td>
+                                <td>
+                                    <input class="form-control" asp-for="Name" placeholder="Enter name" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </td>
+                            </tr>
 
-		</form>
-	</div>
-</div>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="row mt-4">
+                    <div class="offset-sm-4 col-sm-4 d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <a class="btn btn-outline-secondary btn-lg" asp-controller="Publisher" asp-action="Index" role="button">
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #6f4f26, #d2b48c); /* Gradient from brown to tan */
+            margin: 0;
+            padding: 0;
+        }
+
+        .table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+            border-radius: 8px;
+        }
+
+            .table th, .table td {
+                padding: 18px;
+                text-align: left;
+            }
+
+            .table th {
+                background-color: #6f4f26;
+                color: white;
+                font-weight: bold;
+            }
+
+            .table td {
+                background-color: #f9f9f9;
+                border-top: 1px solid #ddd;
+                border-radius: 8px;
+            }
+
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .row {
+            margin-top: 20px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .form-control, .form-control-plaintext {
+            border-radius: 8px;
+            font-size: 1rem;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+            .form-control:focus {
+                border-color: #8b5e3c;
+                box-shadow: 0 0 5px rgba(139, 94, 60, 0.5);
+            }
+
+        .btn-primary {
+            background-color: #8b5e3c; /* Darker brown button */
+            border: none;
+            color: white;
+            text-transform: uppercase;
+            font-weight: 600;
+            border-radius: 5px;
+            padding: 12px 20px;
+            transition: background-color 0.3s;
+        }
+
+            .btn-primary:hover {
+                background-color: #5a3e2d; /* Darker brown on hover */
+            }
+
+        .btn-outline-secondary {
+            color: #8b5e3c;
+            border-color: #8b5e3c;
+            text-transform: uppercase;
+            font-weight: 600;
+            border-radius: 5px;
+            padding: 12px 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .btn-outline-secondary:hover {
+                background-color: #8b5e3c;
+                color: white;
+            }
+
+        /* Responsiveness */
+        media (max-width: 767px) {
+            .col-sm-4
+
+        {
+            font-size: 0.9rem;
+        }
+
+        .col-sm-8 {
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            font-size: 0.9rem;
+            padding: 10px;
+        }
+
+        .btn-primary, .btn-outline-secondary {
+            font-size: 1rem;
+            padding: 10px 15px;
+        }
+
+        }
+    </style>

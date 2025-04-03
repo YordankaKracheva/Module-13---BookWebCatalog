@@ -2,6 +2,13 @@
 @using static BookWebCatalog.Common.AdminUser;
 @model List<Book>
 
+<div class="mb-4">
+    <form method="get" asp-action="Search">
+        <input type="text" name="searchTerm" class="form-control" placeholder="Search by Genre Name" value="@ViewData["SearchTerm"]" />
+        <button type="submit" class="btn btn-primary mt-2">Search</button>
+    </form>
+</div>
+
 <h2 class="text-center mb-5">List of @Model.Count Books</h2>
 
 <div class="row mb-4">
@@ -22,6 +29,7 @@
             <th>Rating</th>
             <th>Genre</th>
             <th>Author</th>
+            <th>Publisher(s)</th>
             @if (User.IsInRole(AdminRoleName))
             {
                 <th>Actions</th>
@@ -38,6 +46,16 @@
                 <td>@book.Rating</td>
                 <td>@book.Genre.Name</td>
                 <td>@book.Author.FirstName @book.Author.LastName</td>
+                <td>
+                    @foreach (var bookPublisher in book.BookPublishers)
+                    {
+                        <span>@bookPublisher.Publisher.Name</span>
+                        @if (bookPublisher != book.BookPublishers.Last())
+                        {
+                            <span>, </span> <!-- Add a comma if there are multiple publishers -->
+                        }
+                    }
+                </td>
                 @if (User.IsInRole(AdminRoleName))
                 {
                     <td>

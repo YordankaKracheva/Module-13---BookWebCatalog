@@ -7,14 +7,90 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BookWebCatalog.styles.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: #b7a07d; /* Soft light brown */
+            border-bottom: 2px solid #432818; /* Slightly darker brown for contrast */
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: #FAF3E0; /* Light beige for brand name */
+            text-transform: uppercase;
+            font-size: 1.2rem;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+            color: white; 
+            font-size: 1rem;
+            text-transform: capitalize; /* Clean and simple */
+            padding: 8px 15px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-item .nav-link:hover,
+        .navbar-nav .nav-item .nav-link:focus {
+            color: #FFB74D; /* Soft peach on hover */
+            background-color: rgba(255, 183, 77, 0.1); /* Light hover background */
+        }
+
+        .navbar-toggler {
+            background-color: #FFB74D; /* Peach */
+        }
+
+        .navbar-toggler-icon {
+            background-color: #FAF3E0; /* Light beige for contrast */
+        }
+
+        .navbar-collapse {
+            justify-content: flex-end;
+        }
+
+        /* Responsive Styles */
+        media (max-width: 768px) {
+            .navbar-nav .nav-item {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Main Content Area */
+        .container {
+            margin-top: 20px;
+        }
+
+        main {
+            padding: 30px 0;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #432818;
+            color: #FAF3E0;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BooksWebCatalog</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" 
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -34,26 +110,20 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">Book</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="BookPublisher" asp-action="Index">BookPublisher</a>
-                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; @DateTime.Now.Year - BooksWebCatalog
-        </div>
-    </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
