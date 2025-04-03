@@ -70,42 +70,7 @@ namespace BookWebCatalog.Controllers
 			// Return the filtered list to the view.
 			return View(booksByGenre);
 		}
-        //public List<BookPublisher> FillBookPublisher()
-        //{
-        //    List<BookPublisher> list = context.BookPublishers.ToList();
-        //    foreach (var item in list)
-        //    {
-        //        Book book = OneBook(item.BookId);
-        //        item.Book = book;
-        //        Publisher publisher = OnePublisher(item.PublisherId);
-        //        item.Publisher = publisher;
-        //    }
-        //    return list;
-        //}
-        //public Book OneBook(int id)
-        //{
-        //    List<Book> books = context.Books.ToList();
-        //    foreach (var item in books)
-        //    {
-        //        if (item.Id == id)
-        //        {
-        //            return item;
-        //        }
-        //    }
-        //    return null!;
-        //}
-        //public Publisher OnePublisher(int id)
-        //{
-        //    List<Publisher> publishers = context.Publishers.ToList();
-        //    foreach (var item in publishers)
-        //    {
-        //        if (item.Id == id)
-        //        {
-        //            return item;
-        //        }
-        //    }
-        //    return null!;
-        //}
+        
 
         [HttpGet]
 		[Authorize(Roles = AdminRoleName)]
@@ -128,31 +93,85 @@ namespace BookWebCatalog.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Create(BookCreateViewModel book)
-		{
-			if (!ModelState.IsValid)
-			{
-				return View(book);
-			}
-			
-			var bookNew = new Book(book.Title, book.DateOfReleasing, book.Rating, book.AuthorID, book.GenreID)
-			{
-				UserID = User.FindFirstValue(ClaimTypes.NameIdentifier)
-			};
+        //public async Task<IActionResult> Create(BookCreateViewModel book)
+        //{
+        //	if (!ModelState.IsValid)
+        //	{
+        //		return View(book);
+        //	}
 
-            var bookPublisher = new BookPublisher
+        //	var bookNew = new Book(book.Title, book.DateOfReleasing, book.Rating, book.AuthorID, book.GenreID)
+        //	{
+        //		UserID = User.FindFirstValue(ClaimTypes.NameIdentifier)
+        //	};
+
+        //          var bookPublisher = new BookPublisher
+        //          {
+        //              BookId = bookNew.Id,
+        //              PublisherId = book.PublisherID
+        //          };
+
+        //          context.BookPublishers.Add(bookPublisher);
+        //          await context.Books.AddAsync(bookNew);
+        //	await context.SaveChangesAsync();
+        //	return RedirectToAction("Index");
+        //}
+
+        [HttpPost]
+        public async Task<IActionResult> Create(BookCreateViewModel book)
+        {
+            if (!ModelState.IsValid)
             {
-                BookId = bookNew.Id,
-                PublisherId = book.PublisherID
-            };
-            
-            context.BookPublishers.Add(bookPublisher);
-            await context.Books.AddAsync(bookNew);
-			await context.SaveChangesAsync();
-			return RedirectToAction("Index");
-		}
+                return View(book);
+            }
 
-		[HttpGet]
+            // Check if a book with the same title already exists
+            var existingBook = await context.Books
+                .FirstOrDefaultAsync(b => b.Title == book.Title);
+
+            if (existingBook != null)
+            {
+                // If the book already exists, add the publisher to the BookPublishers table if it's not already linked
+                var existingBookPublisher = await context.BookPublishers
+                    .FirstOrDefaultAsync(bp => bp.BookId == existingBook.Id && bp.PublisherId == book.PublisherID);
+
+                if (existingBookPublisher == null)
+                {
+                    // Create a new many-to-many relationship if it doesn't exist
+                    var bookPublisher = new BookPublisher
+                    {
+                        BookId = existingBook.Id,
+                        PublisherId = book.PublisherID
+                    };
+                    context.BookPublishers.Add(bookPublisher);
+                    await context.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                // If the book does not exist, create a new book
+                var bookNew = new Book(book.Title, book.DateOfReleasing, book.Rating, book.AuthorID, book.GenreID)
+                {
+                    UserID = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                };
+
+                // Add the new publisher to the many-to-many relationship
+                var bookPublisher = new BookPublisher
+                {
+                    BookId = bookNew.Id,
+                    PublisherId = book.PublisherID
+                };
+
+                context.BookPublishers.Add(bookPublisher);
+                await context.Books.AddAsync(bookNew);
+                await context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
+        [HttpGet]
 		[Authorize(Roles = AdminRoleName)]
 		public async Task<IActionResult> Edit(int id)
 		{
