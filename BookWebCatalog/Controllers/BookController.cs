@@ -43,7 +43,7 @@ namespace BookWebCatalog.Controllers
 		{
 			if (string.IsNullOrEmpty(searchTerm))
 			{
-				ViewData["SearchTerm"] = "All Genres"; // You can customize this as needed.
+				ViewData["SearchTerm"] = "All Genres"; 
 				var allBooks = context.Books
 				.Include(b => b.BookPublishers)
 				.ThenInclude(bp => bp.Publisher)
@@ -51,10 +51,10 @@ namespace BookWebCatalog.Controllers
 				.Include(b => b.Genre)
 				.OrderBy(x => x.Id)
 				.ToList();
-				return View(allBooks); // Show all books if no genre is provided.
+				return View(allBooks); 
 			}
 
-			// Otherwise, filter by genre.
+			
 			var booksByGenre = context.Books
 				.Include(b => b.BookPublishers)
 				.ThenInclude(bp => bp.Publisher)
@@ -64,10 +64,10 @@ namespace BookWebCatalog.Controllers
 				.OrderBy(b => b.Title)
 				.ToList();
 
-			// Pass the search term to the view for display purposes (e.g., to show the current search term).
+			
 			ViewData["SearchTerm"] = searchTerm;
 
-			// Return the filtered list to the view.
+			
 			return View(booksByGenre);
 		}
         
@@ -92,30 +92,7 @@ namespace BookWebCatalog.Controllers
 			return View(viewModel);
 		}
 
-		[HttpPost]
-        //public async Task<IActionResult> Create(BookCreateViewModel book)
-        //{
-        //	if (!ModelState.IsValid)
-        //	{
-        //		return View(book);
-        //	}
-
-        //	var bookNew = new Book(book.Title, book.DateOfReleasing, book.Rating, book.AuthorID, book.GenreID)
-        //	{
-        //		UserID = User.FindFirstValue(ClaimTypes.NameIdentifier)
-        //	};
-
-        //          var bookPublisher = new BookPublisher
-        //          {
-        //              BookId = bookNew.Id,
-        //              PublisherId = book.PublisherID
-        //          };
-
-        //          context.BookPublishers.Add(bookPublisher);
-        //          await context.Books.AddAsync(bookNew);
-        //	await context.SaveChangesAsync();
-        //	return RedirectToAction("Index");
-        //}
+		
 
         [HttpPost]
         public async Task<IActionResult> Create(BookCreateViewModel book)
@@ -124,20 +101,16 @@ namespace BookWebCatalog.Controllers
             {
                 return View(book);
             }
-
-            // Check if a book with the same title already exists
             var existingBook = await context.Books
                 .FirstOrDefaultAsync(b => b.Title == book.Title);
 
             if (existingBook != null)
             {
-                // If the book already exists, add the publisher to the BookPublishers table if it's not already linked
                 var existingBookPublisher = await context.BookPublishers
                     .FirstOrDefaultAsync(bp => bp.BookId == existingBook.Id && bp.PublisherId == book.PublisherID);
 
                 if (existingBookPublisher == null)
                 {
-                    // Create a new many-to-many relationship if it doesn't exist
                     var bookPublisher = new BookPublisher
                     {
                         BookId = existingBook.Id,
@@ -149,13 +122,11 @@ namespace BookWebCatalog.Controllers
             }
             else
             {
-                // If the book does not exist, create a new book
                 var bookNew = new Book(book.Title, book.DateOfReleasing, book.Rating, book.AuthorID, book.GenreID)
                 {
                     UserID = User.FindFirstValue(ClaimTypes.NameIdentifier)
                 };
 
-                // Add the new publisher to the many-to-many relationship
                 var bookPublisher = new BookPublisher
                 {
                     BookId = bookNew.Id,
